@@ -3,8 +3,8 @@
 
 # Config values
 setwd("~/ResearchCode/SNPsR")
-gene_pair_path <- "input/StartStopAnalysis.csv"
-outfile_start_stop <- "result/StartStopResult.csv"
+gene_pair_path <- "input/start_stop/StartStopAnalysis.csv"
+outfile_start_stop <- "result/start_stop/StartStopResult.csv"
 
 # Read file to data frame
 gene_pair_data <- read.csv(gene_pair_path, header = TRUE)
@@ -22,14 +22,20 @@ for (i in 1:number_row) {
      if (current_gene != next_gene && i < number_row) {
           gene_number <- gene_number + 1
           stop_point <- i
-          start_stop_vector <- append(start_stop_vector, c(gene_number, as.character(gene_pair_data[i, 3]), start_point, stop_point))
+          # find median of base pair in block
+          block <- gene_pair_data[start_point:stop_point, 2]
+          md <- median(block)
+          
+          # store result in vector
+          start_stop_vector <- append(start_stop_vector, c(gene_number, as.character(gene_pair_data[i, 3]), start_point, stop_point, md))
+          
           start_point <- i + 1
      }
 }
 
-start_stop_matrix <- matrix(start_stop_vector, length(start_stop_vector)/4, 4, byrow = TRUE)
+start_stop_matrix <- matrix(start_stop_vector, length(start_stop_vector)/5, 5, byrow = TRUE)
 
-colnames(start_stop_matrix) <- c("Gene No.", "Gene Name", "Start", "Stop")
+colnames(start_stop_matrix) <- c("Gene No.", "Gene Name", "Start", "Stop", "Median")
 write.csv(start_stop_matrix, file = outfile_start_stop, row.names = FALSE)
 
 
