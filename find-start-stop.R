@@ -1,5 +1,5 @@
 # Code by Phisan Sookkhee and Sirikanlaya Sookkhee
-# Edited 13 AUG 2016 - 13.30 
+# Edited 13 AUG 2016 - 1.30 pm
 
 # Config values
 setwd("~/ResearchCode/SNPsR")
