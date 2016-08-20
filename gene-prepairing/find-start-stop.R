@@ -3,8 +3,8 @@
 
 # Config values
 setwd("~/ResearchCode/SNPsR")
-gene_pair_path <- "input/start_stop/StartStopAnalysis.csv"
-outfile_start_stop <- "result/start_stop/StartStopResult.csv"
+gene_pair_path <- "input/start-stop/StartStopAnalysis.csv"
+outfile_start_stop <- "result/start-stop/StartStopResult.csv"
 
 # Read file to data frame
 gene_pair_data <- read.csv(gene_pair_path, header = TRUE)

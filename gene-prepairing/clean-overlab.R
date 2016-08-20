@@ -1,9 +1,13 @@
+# Clean Overlab Gene
+# By unsing compairation between base-pair point and start, stop
+# Edit by Phisan Sookkhe, 20 Aug 2016 - 12:15
+
 # Config values
 setwd("~/ResearchCode/SNPsR")
 
-infile_result_overlab <- "result/GroupingGene/GroupResultOverlab.csv"
-outfile_result_clean <- "result/GroupingGene/GroupResultClean.csv"
-outfile_snp_on_gene <- "result/GroupingGene/SNPsonGeneClean.csv"
+infile_result_overlab <- "result/grouping-gene/01.GroupResultOverlab.csv"
+outfile_result_clean <- "result/grouping-gene/03.GroupResultClean.csv"
+outfile_snp_on_gene <- "result/grouping-gene/04.SNPsonGeneClean.csv"
 
 # Clean Overlab SNPs
 result_mx <- read.csv(infile_result_overlab, header = TRUE)
@@ -15,18 +19,35 @@ for (i in 1:nrow(result_mx)) {
           gene_1 <- result_mx[i-1, ]
           gene_2 <- result_mx[i, ]
           
-          median_gene_1 <- median(c(as.numeric(gene_1[4]):as.numeric(gene_1[6])))
-          median_gene_2 <- median(c(as.numeric(gene_2[4]):as.numeric(gene_2[6])))
+          s1 <- as.numeric(gene_1[4])
+          e1 <- as.numeric(gene_1[6])
           
-          dt_bp_gene_1 <- abs(median_gene_1 - crr_base_pair)
-          dt_bp_gene_2 <- abs(median_gene_2 - crr_base_pair)
+          s2 <- as.numeric(gene_2[4])
+          e2 <- as.numeric(gene_2[6])
           
-          if (dt_bp_gene_1 < dt_bp_gene_2) {
+          if (s1 < s2 && e2 < e1) {
+               # @sub-set overlab case
                result_mx[i-1, 8] <- as.character("TRUE")
                result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i-1, ], paste0, collapse=""))
-          } 
-          else {
-               result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
+          } else {
+               # @nornal overlab case
+               
+               # @Method - 1 : by using difference between start - stop
+#                dt_bp_gene_1 <- abs(e1 - crr_base_pair)
+#                dt_bp_gene_2 <- abs(s2 - crr_base_pair)
+               
+               # @Method - 2 : by using difference between median
+               # @By experimental result : method - 2 is better than method - 1 
+               dt_bp_gene_1 <- abs(median(s1:e1) - crr_base_pair)
+               dt_bp_gene_2 <- abs(median(s2:e2) - crr_base_pair)
+               
+               if (dt_bp_gene_1 < dt_bp_gene_2) {
+                    result_mx[i-1, 8] <- as.character("TRUE")
+                    result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i-1, ], paste0, collapse=""))
+               } 
+               else {
+                    result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
+               }
           }
      } else {
           if (i < nrow(result_mx) && is.na(result_mx[i + 1, 8])) {
@@ -35,7 +56,6 @@ for (i in 1:nrow(result_mx)) {
      }
 }
 
-# Write none-overlab file
 header <- c("no.",
             "rs number",
             "Bp old from Agaye", 
@@ -45,6 +65,7 @@ header <- c("no.",
             "symbols", 
             "overlab")
 
+# Write none-overlab file
 colnames(result_mx_clean) <- header
 write.csv(result_mx_clean[-1, ], file = outfile_result_clean, row.names = FALSE)
 

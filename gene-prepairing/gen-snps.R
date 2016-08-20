@@ -54,11 +54,11 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
 
 # Config values
 setwd("~/ResearchCode/SNPsR")
-snpsName_path <- "input/NameONLY13479.csv"
-genotype_path <- "input/New_data_3008persons_13479SNPs.csv"
-outfile_case_control <- paste("result/", format(Sys.time(), "%b-%d-%Y-%X"), ".csv", sep = "")
-outfile_p_value_glm <- paste("result/", format(Sys.time(), "%b-%d-%Y-%X"), "_p_value_glm", ".csv", sep = "")
-outfile_p_value_chi <- paste("result/", format(Sys.time(), "%b-%d-%Y-%X"), "_p_value_chi", ".csv", sep = "")
+snpsName_path <- "input/gen-snps/NameONLY13479.csv"
+genotype_path <- "input/gen-snps/New_data_3008persons_13479SNPs.csv"
+outfile_case_control <- paste("result/gen-snps/", format(Sys.time(), "%b-%d-%Y-%X"), ".csv", sep = "")
+outfile_p_value_glm <- paste("result/gen-snps/", format(Sys.time(), "%b-%d-%Y-%X"), "_p_value_glm", ".csv", sep = "")
+outfile_p_value_chi <- paste("result/gen-snps/", format(Sys.time(), "%b-%d-%Y-%X"), "_p_value_chi", ".csv", sep = "")
 
 dis_snp = 'rs3789038'
 number_of_population <- 1000

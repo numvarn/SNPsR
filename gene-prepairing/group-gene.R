@@ -1,10 +1,10 @@
 # Config values
 setwd("~/ResearchCode/SNPsR")
-snp_pos_file <- "input/GroupingGene/SNP_Pos_13479.csv"
-start_stop_file <- "input/GroupingGene/StartStopPosition.csv"
+snp_pos_file <- "input/grouping-gene/SNP_Pos_13479_cut_snps.csv"
+start_stop_file <- "input/grouping-gene/StartStopPosition.csv"
 
-outfile_result_overlab <- "result/GroupingGene/GroupResultOverlab.csv"
-outfile_snp_on_gene_overlab <- "result/GroupingGene/SNPsonGeneOverlab.csv"
+outfile_result_overlab <- "result/grouping-gene/01.GroupResultOverlab.csv"
+outfile_snp_on_gene_overlab <- "result/grouping-gene/02.SNPsonGeneOverlab.csv"
 
 snp_pos_data <- read.csv(snp_pos_file, header = TRUE)
 start_stop_data <- read.csv(start_stop_file, header = TRUE)
