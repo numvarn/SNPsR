@@ -2,8 +2,9 @@
 setwd("~/ResearchCode/SNPsR")
 snp_pos_file <- "input/GroupingGene/SNP_Pos_13479.csv"
 start_stop_file <- "input/GroupingGene/StartStopPosition.csv"
-outfile_result <- "result/GroupingGene/GroupResult.csv"
-outfile_snp_on_gene <- "result/GroupingGene/SNPsonGene.csv"
+
+outfile_result_overlab <- "result/GroupingGene/GroupResultOverlab.csv"
+outfile_snp_on_gene_overlab <- "result/GroupingGene/SNPsonGeneOverlab.csv"
 
 snp_pos_data <- read.csv(snp_pos_file, header = TRUE)
 start_stop_data <- read.csv(start_stop_file, header = TRUE)
@@ -22,7 +23,7 @@ for (i in 1:nrow(snp_pos_data)) {
      for (j in 1:nrow(start_stop_data)) {
           start_found <- 0
           stop_found <- 0
-          symb <- "N/A"
+          symb <- NA
           overlab <- ""
           
           start_point <- start_stop_data[j, 1]
@@ -36,6 +37,7 @@ for (i in 1:nrow(snp_pos_data)) {
                stop_found <- stop_point
                symb <- start_stop_data[j, 3]
                
+               # Overlab case
                if (found_count > 1) {
                     overlab <- "TRUE"
                }
@@ -53,7 +55,7 @@ for (i in 1:nrow(snp_pos_data)) {
           }
           
           # Count SNP on each Gene
-          if (symb != "N/A") {
+          if (!is.na(symb)) {
                index <- 0
                index <- match(symb, as.vector(snp_on_gene[, 2]))
                if (is.na(index)) {
@@ -69,27 +71,33 @@ for (i in 1:nrow(snp_pos_data)) {
           result <- c(snp_pos_data[i, 1],
                       as.character(snp_pos_data[i, 2]),
                       snp_pos_data[i, 3],
-                      0,
+                      as.character(""),
                       snp_pos_data[i, 4], #base_pair
-                      0,
-                      as.character("N/A"),
+                      as.character(""),
+                      as.character(""),
                       as.character(""))
           
           result_mx <- rbind(result_mx, result)
      }
 }
 
+# Write Result Overlab to CSV file ************************************
 colnames(snp_on_gene) <- c("no.", "Gene Name", "SNPs Count")
-write.csv(snp_on_gene[-1, ], file = outfile_snp_on_gene, row.names = FALSE)
+write.csv(snp_on_gene[-1, ], file = outfile_snp_on_gene_overlab, row.names = FALSE)
 
-colnames(result_mx) <- c("no.",
-                         "rs number",
-                         "Bp old from Agaye", 
-                         "start", "BP new", 
-                         "stop", 
-                         "symbols", 
-                         "overlab")
+# Write overlab file
+header <- c("no.",
+            "rs number",
+            "Bp old from Agaye", 
+            "start", 
+            "BP new", 
+            "stop", 
+            "symbols", 
+            "overlab")
 
-write.csv(result_mx[-1, ], file = outfile_result, row.names = FALSE)
+colnames(result_mx) <- header
+write.csv(result_mx[-1, ], file = outfile_result_overlab, row.names = FALSE)
+
+
 
 
