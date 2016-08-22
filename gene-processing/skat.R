@@ -4,12 +4,18 @@ library(SKAT)
 setwd("~/ResearchCode/SNPsR")
 z_file <- "input/skat/Z.csv"
 yb_file <- "input/skat/yb.csv"
-start_stop_file <- "input/skat/StartStopResult.csv"
-outfile_p_value <- "result/skat/pvalue.csv"
+
+#start_stop_file <- "input/skat/StartStopResult.csv"
+start_stop_file <- "result/grouping-gene/10.GroupingComplete.csv"
+
+outfile_p_value <- "result/skat/pvalue-22-aug-2016-14-00.csv"
 
 z <- read.csv(z_file, header = FALSE)
 yb <- read.csv(yb_file, header = FALSE)
 start_stop = read.csv(start_stop_file, header = TRUE)
+
+# delete error SNPs
+z <- z[, c(-5506, -9497)]
 
 # Convert Data Fram to matrix
 yb_mx <- as.matrix(yb[, 1])
