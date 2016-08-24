@@ -14,7 +14,7 @@ result_mx <- read.csv(infile_result_overlab, header = TRUE)
 
 result_mx_clean <- matrix("NA", nrow = 1, ncol = 8)
 for (i in 1:nrow(result_mx)) {
-     if (!is.na(result_mx[i, 8])) {
+     if (is.character(result_mx[i, 8]) == TRUE) {
           crr_base_pair <- as.numeric(result_mx[i, 5]) 
           gene_1 <- result_mx[i-1, ]
           gene_2 <- result_mx[i, ]
@@ -33,8 +33,8 @@ for (i in 1:nrow(result_mx)) {
                # @nornal overlab case
                
                # @Method - 1 : by using difference between start - stop
-               #                dt_bp_gene_1 <- abs(e1 - crr_base_pair)
-               #                dt_bp_gene_2 <- abs(s2 - crr_base_pair)
+#                dt_bp_gene_1 <- abs(e1 - crr_base_pair)
+#                dt_bp_gene_2 <- abs(s2 - crr_base_pair)
                
                # @Method - 2 : by using difference between median
                # @By experimental result : method - 2 is better than method - 1 
@@ -42,17 +42,18 @@ for (i in 1:nrow(result_mx)) {
                dt_bp_gene_2 <- abs(median(s2:e2) - crr_base_pair)
                
                if (dt_bp_gene_1 < dt_bp_gene_2) {
-                    result_mx[i-1, 8] <- as.character("TRUE")
                     result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i-1, ], paste0, collapse=""))
                } 
                else {
                     result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
                }
           }
-     } else {
-          if (i < nrow(result_mx) && is.na(result_mx[i + 1, 8])) {
-               result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
-          }
+     } 
+     else if (i < nrow(result_mx) && is.na(result_mx[i + 1, 8])) {
+          result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
+     }
+     else if (i == nrow(result_mx)) {
+          result_mx_clean <- rbind(result_mx_clean, sapply(result_mx[i, ], paste0, collapse=""))
      }
 }
 
@@ -90,3 +91,30 @@ for (i in 1:nrow(cleaned)) {
 # Write Result Overlab to CSV file ************************************
 colnames(snp_on_gene) <- c("no.", "Gene Name", "SNPs Count")
 write.csv(snp_on_gene[-1, ], file = outfile_snp_on_gene, row.names = FALSE)
+
+# check smooth of gene
+# for protect error from non smooth gene
+result_mx_clean <- result_mx_clean[-1, ]
+error_mx <- matrix(NA, 1, 3)
+for (i in 1:nrow(result_mx_clean)) {
+     if (as.character(result_mx_clean[i, 7]) != "") {
+          current_gene <- as.character(result_mx_clean[i, 7])
+          j <- i + 1
+          stop_point <- 0
+          error_point <- c()
+          while (j <= nrow(result_mx_clean)) {
+               next_gene <- as.character(result_mx_clean[j, 7])
+               if (next_gene != current_gene) {
+                    stop_point <- j-1
+               }
+               else if (stop_point != 0 && next_gene == current_gene) {
+                    cat(sprintf("%s, %s, %s\n", current_gene, stop_point, j))
+                    error_mx <- rbind(error_mx, c(current_gene, stop_point, j))
+                    break
+               }
+               
+               j <- j + 1
+          }
+     }
+}
+

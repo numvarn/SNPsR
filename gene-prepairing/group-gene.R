@@ -1,6 +1,6 @@
 # Config values
 setwd("~/ResearchCode/SNPsR")
-snp_pos_file <- "input/grouping-gene/SNP_Pos_13479_cut_snps.csv"
+snp_pos_file <- "input/grouping-gene/SNP_Pos_13479_cut_2_snps.csv"
 start_stop_file <- "input/grouping-gene/StartStopPosition.csv"
 
 outfile_result_overlab <- "result/grouping-gene/01.GroupResultOverlab.csv"

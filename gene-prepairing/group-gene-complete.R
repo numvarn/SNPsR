@@ -232,6 +232,10 @@ for (i in 1:number_row) {
      }
 }
 
+for (i in 1:nrow(grouping_mx_complete)) {
+     grouping_mx_complete[i, 1] <- (i - 1)
+}
+
 # Find median of start - stop point
 number_row <- nrow(grouping_mx_complete)
 for (i in 2:number_row) {
