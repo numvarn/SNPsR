@@ -2,13 +2,11 @@ library(SKAT)
 
 # Config values
 setwd("~/ResearchCode/SNPsR")
-z_file <- "input/skat/Z.csv"
+z_file <- "input/skat/Z-NumOfCoppies13479_TransposeAGaye.csv"
 yb_file <- "input/skat/yb.csv"
 
-#start_stop_file <- "input/skat/StartStopResult.csv"
 start_stop_file <- "result/grouping-gene/10.GroupingComplete.csv"
-
-outfile_p_value <- "result/skat/pvalue-22-aug-2016-14-00.csv"
+outfile_p_value <- paste("result/skat/", format(Sys.time(), "%b-%d-%Y-%X"), ".csv", sep = "")
 
 z <- read.csv(z_file, header = FALSE)
 yb <- read.csv(yb_file, header = FALSE)
