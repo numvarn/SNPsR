@@ -1,5 +1,5 @@
 # Code by Phisan Sookkhee and Sirikanlaya Sookkhee
-# Edited 13 AUG 2016
+# Edited 27 AUG 2016 22:03 PM
 
 # Funciton for generate only one new genotype
 # @param genotype : matrix for store genotype data from CSV file
@@ -12,7 +12,7 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
      set.seed(as.numeric(Sys.time()) + loop_count)
      sample_total <- nrow(genotypes)
      
-     ramdom_set <- sample(1:sample_total, 100, replace = F)
+     ramdom_set <- sample(1:sample_total, 1000, replace = F)
      samples_index <- sample(ramdom_set, 2, replace = F)
 
      # @gen: Step 2 - calculate x_spec
@@ -20,8 +20,9 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
                           + genotypes[samples_index[2], dis_snp_pos])
 
      # @gen: Step 3 - Find probabiliy value using logistic regression
+     # Edited 27 AUG 2016 22:03 PM
      alpha <- 0.0
-     gene_effect <- 0.2
+     gene_effect <- 0.0
 
      exp_value <- exp(alpha + (gene_effect * x_spec))
      prob <- exp_value / (1 + exp_value)
