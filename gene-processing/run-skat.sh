@@ -1,8 +1,8 @@
 #!/bin/sh
 
-path="/Volumes/Phisan Segate/case-control-simulate/"
+path="/Volumes/Sirikanlaya/case-control-replicated/0.0/"
 name=""
-for i in {10..12}
+for i in {1..1000}
 do
     if [[ $i -lt 10 ]]; then
         name="000$i.csv"

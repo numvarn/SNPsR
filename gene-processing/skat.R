@@ -8,7 +8,7 @@ case_control_file <- commandArgs(TRUE)
 # check file-path from command line argument
 if (case_control_file[1] != "") {
      filename <- basename(case_control_file[1])
-     start_stop_file <- "result/grouping-gene-old/10.GroupingComplete.csv"
+     start_stop_file <- "result/grouping-gene/10.GroupingComplete-custom.csv"
      outfile_p_value <- paste("result/skat/", filename, sep = "")
      
      z_temp <- read.csv(case_control_file, header = TRUE)
@@ -17,15 +17,15 @@ if (case_control_file[1] != "") {
      z <- z_temp[, 4:ncol(z_temp)]
      
      # delete error SNPs
-     z <- z[, c(-5506, -9497)]
-     # z <- z[, c(-5154)]
+     # z <- z[, c(-5506, -9497)] #snps 13477
+     z <- z[, c(-5154)] #snps 13478
      
      # Convert Data Fram to matrix
      yb_mx <- as.matrix(yb)
      pval <- matrix(NA, nrow(start_stop), 6)
      
-     # for(i in 1:nrow(start_stop)) {
-     for(i in 1:5) {
+     for(i in 1:nrow(start_stop)) {
+     #for(i in 1:5) {
           z_gene = as.matrix(z[, start_stop[i, 3]:start_stop[i, 4]])
           obj <-
                SKAT_Null_Model(

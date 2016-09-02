@@ -1,5 +1,5 @@
 # Config values
-setwd("/Volumes/Phisan Segate/case-control-simulate")
+setwd("/Volumes/Sirikanlaya/case-control-replicated/0.0")
 
 
 filez <- list.files("./")
