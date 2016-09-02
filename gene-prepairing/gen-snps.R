@@ -66,11 +66,11 @@ snpsName_path <- "input/gen-snps/NameONLY13479.csv"
 genotype_path <- "input/gen-snps/New_data_3008persons_13479SNPs.csv"
 
 dis_snp = 'rs3789038'
-number_of_population <- 1000
+number_of_population <- 3000
 number_of_case <- number_of_population / 2
 
 # Set replicated number for generate / iterations number
-replicated_number = 1000
+replicated_number = 2
 
 # Read input data from CSV files
 snpsName_data <- read.csv(snpsName_path, header = TRUE)
