@@ -36,7 +36,7 @@ if (case_control_file[1] != "") {
                )
           p <- SKAT(z_gene, obj, kernel = "linear.weighted")$p.value
           
-          cat(sprintf("Gene no.%s : %s , P-value = %s\n\n", i, start_stop[i, 2], p))
+          # cat(sprintf("Gene no.%s : %s , P-value = %s\n\n", i, start_stop[i, 2], p))
           
           pval[i, 1] <- i
           pval[i, 2] <- as.character(start_stop[i, 2])
