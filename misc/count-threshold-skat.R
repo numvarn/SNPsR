@@ -30,5 +30,3 @@ colnames(conclude_mx) <- c("Gene Name",
                            "Bonferroni normal threshold")
 
 write.csv(conclude_mx, file = conclude_out_file, row.names = FALSE)
-
-
