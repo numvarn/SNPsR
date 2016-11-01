@@ -3,33 +3,64 @@ setwd("~/ResearchCode/SNPsR")
 geno_array_path <- "input/genotype-transpose/Geno_array_13479_Transpose.csv"
 geno_array_data<- read.csv(geno_array_path, header = FALSE)
 
-outfile_left <- "result/genotype-transpose/01.Geno_array_13479_Transpose_left.csv"
-outfile_right <- "result/genotype-transpose/02.Geno_array_13479_Transpose_right.csv"
-outfile_total <- "result/genotype-transpose/03.Geno_array_13479_Transpose_total.csv"
+snps_number <- ncol(geno_array_data)
+rows_number <- nrow(geno_array_data)
 
-snps <- ncol(geno_array_data)
-rows <- nrow(geno_array_data)
-
-geno_left_mx <- matrix(NA, rows, snps)
-geno_right_mx <- matrix(NA, rows, snps)
-
-for (i in 1:rows) {
-     line <- c()
-     for (j in 1:snps) {
-          char <- as.character(geno_array_data[i, j])
-          line <- c(line, char)
-     }
-     geno_left_mx[i, ] <- substr(line, 1, 1)
-     geno_right_mx[i, ] <- substr(line, 2, 2)
+for (i in 1:2) {
+     snp <- geno_array_data[, i]
+     feq = table(snp)
      
-     cat(sprintf("Processing row : %s\n", i))
+     double_caes <- c('AA', 'CC', 'GG', 'TT')
+     
+     v <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+     allele <- c('AA', 'AC', 'AG', 'AT', 
+                 'CA', 'CC', 'CG', 'CT', 
+                 'GA', 'GC', 'GG', 'GT', 
+                 'TA', 'TC', 'TG', 'TT')
+     names(v) <- allele
+     
+     for (key in allele) {
+          if (key %in% snp) {
+               v[key] <- feq[[key]][1]
+          }
+     }
+     
+     feq_summary <- v[v > 0]
+     allele_summary <- c(names(feq_summary))
+     
+     n1 <- 0
+     n2 <- 0
+     n3 <- 0
+     
+     for (label in allele_summary) {
+          if(label %in% double_caes && n1 == 0) {
+               n1 = feq_summary[label]
+          } else if(n2 == 0) {
+               n2 = feq_summary[label]
+          } else if(n2 != 0) {
+               n3 = feq_summary[label]
+          }
+     }
+   
+     litter1 <- substr(allele_summary[2], 1, 1)
+     litter2 <- substr(allele_summary[2], 2, 2)
+     
+     litter1_value = (2*n1) + n2
+     litter2_value = (2*n3) + n2
+     
+     # replace litter with 1 by min value
+     replace_litter <- ''
+     if (litter1_value <= litter2_value) {
+          replace_litter <- litter1
+     } else {
+          replace_litter <- litter2
+     }
+     
+     # print value for dobule check
+     print(feq_summary)
+     cat(sprintf("n1=%s, n2=%s, n3=%s\n", n1, n2, n3))
+     cat(sprintf("litter1: %s, litter2: %s\n", litter1, litter2))
+     cat(sprintf("replace litter : %s\n", replace_litter))
+     
 }
-
-total_mx = rbind(geno_left_mx, geno_right_mx)
-
-# Write all data to CSV
-write.csv(geno_left_mx, file = outfile_left, row.names = FALSE)
-write.csv(geno_right_mx, file = outfile_right, row.names = FALSE)
-write.csv(total_mx, file = outfile_total, row.names = FALSE)
-
 

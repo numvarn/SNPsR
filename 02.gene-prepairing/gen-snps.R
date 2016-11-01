@@ -31,7 +31,7 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
      # @gen: Step 3 - Find probabiliy value using logistic regression
      # Edited 2 SEP 2016 6:05 PM
      alpha <- 0.0
-     gene_effect <- 0.2
+     gene_effect <- 0.0
 
      exp_value <- exp(alpha + (gene_effect * x_spec))
      prob <- exp_value / (1 + exp_value)
@@ -134,7 +134,7 @@ if (length(replicate_range) == 2 && replicate_range[1] < replicate_range[2]) {
           
           # Write Case & Control data set to CSV file ******************************#
           # Set result's filename by using data and time format
-          outfile_path <- "result/gen-snps/"
+          outfile_path <- "/Volumes/Sirikanlaya/gen-snps-phisan/0.0/"
           outfile_case_control <- paste(outfile_path,
                                         i, 
                                         ".csv", 

@@ -16,7 +16,7 @@ case_control_file <- commandArgs(TRUE)
 
 # get replicated for CSV file
 outfile_name <- basename(case_control_file)
-outfile_p_value <- paste("result/single-snps-test-glm/0.0/", outfile_name, sep = "")
+outfile_p_value <- paste("/Volumes/Sirikanlaya/gen-snps-phisan/result-single-0.0/", outfile_name, sep = "")
      
 replicated <- read.csv(case_control_file)
 
