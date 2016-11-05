@@ -14,41 +14,45 @@ row_number <- nrow(conclude_skat_data)
 threshold_bonf <- -log10(0.05 / row_number)
 threshold_bonf_norm <- -log10(0.05)
 
-# Create matrix for store result
-conclude_skat_mx <- matrix(NA, row_number+3, col_number)
-for (i in 1:col_number) {
-     if (i <= 8) {
-          for (j in 1:row_number) {
-               conclude_skat_mx[j, i] <- as.character(conclude_skat_data[j, i])
-          }  
-          if (i == 8) {
-               conclude_skat_mx[row_number+1, i] <- as.character(paste(">-log10(0.05 / ", row_number, ")"))
-               conclude_skat_mx[row_number+2, i] <- as.character(">-log10(0.05)")
-               conclude_skat_mx[row_number+3, i] <- as.character("status")
+# Create matrix for store result.
+conclude_skat_mx <- matrix(0, col_number-7, 4)
+
+for (i in 9:col_number) {
+     index <- i - 8
+     cat(sprintf("Processing Replicated #%s\n", index))
+     threshold_bonf_count <- 0
+     threshold_bonf_norm_count <- 0
+     status <- 0
+     
+     for (j in 1:row_number) {
+          if (conclude_skat_data[j, i] > threshold_bonf_norm) {
+               threshold_bonf_norm_count <- threshold_bonf_norm_count + 1
           }
-     } else {
-          cat(sprintf("Processing SNPs #%s\n", i-8))
-          threshold_bonf_count <- 0
-          threshold_bonf_norm_count <- 0
-          status <- 0
           
-          for (j in 1:row_number) {
-               conclude_skat_mx[j, i] <- conclude_skat_data[j, i]
-               
-               if (conclude_skat_data[j, i] > threshold_bonf_norm) {
-                    threshold_bonf_norm_count <- threshold_bonf_norm_count + 1
-               }
-               
-               if (conclude_skat_data[j, i] > threshold_bonf) {
-                    threshold_bonf_count <- threshold_bonf_count + 1
-                    status <- 1
-               }
+          if (conclude_skat_data[j, i] > threshold_bonf) {
+               threshold_bonf_count <- threshold_bonf_count + 1
+               status <- 1
           }
-          conclude_skat_mx[row_number+1, i] <- threshold_bonf_count
-          conclude_skat_mx[row_number+2, i] <- threshold_bonf_norm_count
-          conclude_skat_mx[row_number+3, i] <- status
      }
+     conclude_skat_mx[index, 1] <- paste("P", index, sep = "")
+     conclude_skat_mx[index, 2] <- threshold_bonf_count
+     conclude_skat_mx[index, 3] <- threshold_bonf_norm_count
+     conclude_skat_mx[index, 4] <- status
 }
+
+# The last row is show summation of fequency.
+conclude_skat_mx[index+1, 1] <- "SUM"
+conclude_skat_mx[index+1, 2] <- sum(as.numeric(conclude_skat_mx[, 2]))
+conclude_skat_mx[index+1, 3] <- sum(as.numeric(conclude_skat_mx[, 3]))
+conclude_skat_mx[index+1, 4] <- sum(as.numeric(conclude_skat_mx[, 4]))
+
+# Set Header to result matrix
+colnames(conclude_skat_mx) <- c("Rep",
+                                "> Bonferroni",
+                                "> Bonferroni normal",
+                                "Status")
 
 cat(sprintf("Writing result to %s\n", conclude_out_file))
 write.csv(conclude_skat_mx, file = conclude_out_file, row.names = FALSE)
+
+
