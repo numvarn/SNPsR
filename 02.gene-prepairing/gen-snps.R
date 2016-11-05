@@ -23,19 +23,19 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
      
      # random individual's index
      samples_index <- sample(1:sample_total, 2, replace = T)
-
+     
      # @gen: Step 2 - calculate x_spec
      x_spec <- as.numeric(genotypes[samples_index[1], dis_snp_pos]
                           + genotypes[samples_index[2], dis_snp_pos])
-
+     
      # @gen: Step 3 - Find probabiliy value using logistic regression
      # Edited 2 SEP 2016 6:05 PM
      alpha <- 0.0
      gene_effect <- 0.0
-
+     
      exp_value <- exp(alpha + (gene_effect * x_spec))
      prob <- exp_value / (1 + exp_value)
-
+     
      # @gen: Step 4 - Using uniform random to cutoff \
      #                new genotype is 'Case' or 'Control'
      cutoff_value <- runif(1, 0, 1)
@@ -44,15 +44,15 @@ generateGenotype <- function(genotypes, dis_snp_pos, loop_count) {
      } else {
           disease <- 0
      }
-
+     
      # @gen: Step 5 - create new Individual by add vector A and vector B together
      tmp_genotype <- genotypes[samples_index[1],] + genotypes[samples_index[2],]
-
+     
      # @gen: step 6 - insert disease or Y value into fist index of list
      new_genotype <- append(tmp_genotype, disease, 0)
      new_genotype <- append(new_genotype, samples_index[1], 1)
      new_genotype <- append(new_genotype, samples_index[2], 2)
-
+     
      # @gen : step 7 - return only one new genotype
      return(new_genotype)
 }
@@ -150,10 +150,8 @@ if (length(replicate_range) == 2 && replicate_range[1] < replicate_range[2]) {
           write.csv(all_data, file = outfile_case_control, row.names = FALSE)
           
           cat(sprintf("Replicated #%s Already created, file %s\n", 
-                     i, outfile_case_control))
+                      i, outfile_case_control))
      }
 } else {
      print("Please, Enter replicated range for example 1 100 !!")
 }
-
-
